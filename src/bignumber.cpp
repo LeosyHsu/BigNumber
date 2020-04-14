@@ -340,51 +340,23 @@ BigNumber BigNumber::multiply(BigNumber other)
         }
     }
     if (bn1 == 0 || bn2 == 0) return 0;
-   
-    
-    
-    /*int diff_int = bn1.getIntLength() - bn2.getIntLength();
-    // padding integer bits
-    for (int i = 0; i < diff_int; ++i) {
-        bn2._numberString.insert(bn2._numberString.begin(), '0');
-    }
-    // padding decimal bits
-    if (bn1.getDecLength() > bn2.getDecLength()) {
-        int diff_dec = bn1.getDecLength() - bn2.getDecLength();
-        for (int i = 0; i < diff_dec; ++i) {
-            if (i == 0 && !bn2.isDecimal())
-                bn2._numberString.insert(bn2._numberString.end(), '.');
-            else
-                bn2._numberString.insert(bn2._numberString.end(), '0');
-        }
-    }
-    else {
-        int diff_dec = bn2.getDecLength() - bn1.getDecLength();
-        for (int i = 0; i < diff_dec; ++i) {
-            if (i == 0 && !bn1.isDecimal())
-                bn1._numberString.insert(bn1._numberString.end(), '.');
-            else
-                bn1._numberString.insert(bn1._numberString.end(), '0');
-        }
-    }*/
 
     std::string calc_tmp;
     BigNumber results = "";
     int carry = 0;
     int mult_times = bn2._numberString.size() - 1; 
-    int multiplicand_length = bn1._numberString.size() - 1;
-    int multiplier_index = bn2._numberString.size() - 1;
-    int multiplicand_index = bn1._numberString.size() - 1;
    
+    int compat = 0;
     for (int i = mult_times; i >= 0; i--) {
-        if (bn2._numberString[multiplier_index] == '.') {
-            multiplier_index--;
+        if (bn2._numberString[i] == '.' || bn2._numberString[i] == '0') {
+            if (bn2._numberString[i] == '0')
+                compat++;
             continue;
         }
             
         for (int d = (int)bn1._numberString.size() - 1; d >= 0; d--) {
             if (bn1._numberString[d] != '.') {
-                int mult = (bn1._numberString[d] - '0') * (bn2._numberString[multiplier_index] - '0') + carry;
+                int mult = (bn1._numberString[d] - '0') * (bn2._numberString[i] - '0') + carry;
                 carry = 0;
                 if (mult <= 9 || d == 0) {
                     calc_tmp.insert(0, std::to_string(mult));
@@ -395,21 +367,20 @@ BigNumber BigNumber::multiply(BigNumber other)
                 }
             }
         }
-        /*if ((bn1._numberString[multiplicand_index] != '.')&& (bn2._numberString[multiplier_index] != '.')) {
-            int point_index = calc_tmp.size() - (((multiplier_index - bn2.getPointIndex()) <= 0 ? 0 : (multiplier_index - bn2.getPointIndex())) + (multiplicand_length - bn1.getPointIndex()));
-            if (point_index < 0) point_index = 0;
-            calc_tmp.insert(point_index, ".");
-            results += calc_tmp;
-        }*/
-        int multiplicand_dec_length = (bn1.getDecLength() == 0) ? 0 : bn1.getDecLength() - 1;
-        int multiplier_dec_length = (multiplier_index - bn2.getPointIndex() <= 0) ? 0 : multiplier_index - bn2.getPointIndex();
-        int point_index = calc_tmp.size() - (multiplicand_dec_length + multiplier_dec_length);
-
-        calc_tmp.insert(point_index, ".");
+        for(int i=0;i< compat;i++)
+            calc_tmp.append("0");
         results += calc_tmp;
         calc_tmp = "";
-        multiplier_index--;
+        compat++;
+      
     }
+    int a = (bn1.getDecLength() - 1) < 0 ? 0 : (bn1.getDecLength() - 1);
+    int b = (bn2.getDecLength() - 1) < 0 ? 0 : (bn2.getDecLength() - 1);
+    int c = results._numberString.size() - (a + b);
+    if (c <  0)
+        for (c; c <= 0; c++)
+            results._numberString.insert(0, "0");
+    results._numberString.insert(c, ".");
     
     return results.normalize();
 }
@@ -440,6 +411,8 @@ BigNumber BigNumber::divide(BigNumber other)
         ++quotient;
     }
     if (sign) quotient.negate();
+    if (quotient * bn2 == dividend)
+        return quotient;
     BigNumber p = "0.1";
     BigNumber p_tmp = "0";
     BigNumber p_tmp2 = "0.1";
