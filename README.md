@@ -7,6 +7,8 @@ BigNumber is a C++ class that allows for the creation and computation of arbitra
 integers.
 
 The maximum possible length of a BigNumber is `std::string::max_size`.
+The maximum possible length of a Bignumber divide arithmetic is define in .h file `constexpr auto precision = 50
+The Bignumber is support decimal arithmetic
 
 ## Installation
 To add BigNumber to your C++ project, you can download the `bin` folder from this repository, which 
@@ -32,6 +34,7 @@ Examples:
     BigNumber f = 30;       //BigNumber f is created with value 30.
     BigNumber g = "2060";   //BigNumber g is created with value 2060.
     BigNumber h(22);        //BigNumber h is created with value 22.
+    BigNumber i("10.33");   //BigNumber h is created with value 10.33 .
 
 
 ## Methods
