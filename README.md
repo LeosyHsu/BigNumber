@@ -55,11 +55,6 @@ Divides the BigNumber by another BigNumber
 
 `BigNumber("30").divide(BigNumber("5")) => BigNumber("6")`
 
-### `pow(int exponent)`
-Raises the BigNumber to the power of the exponent
-
-`BigNumber("2").pow(3) => BigNumber("8")`
-
 ### `getString()`
 Returns the BigNumber as an std::string
 
@@ -81,10 +76,6 @@ Checks if the other BigNumber is equal to this one
 
 `BigNumber("24").equals(BigNumber("28")) => false`
 
-### `digits()`
-Returns the number of digits in the BigNumber
-
-`BigNumber("28374").digits() => 5`
 
 ### `isNegative()`
 Determines whether a BigNumber is negative
@@ -95,21 +86,6 @@ Determines whether a BigNumber is negative
 Determines whether a BigNumber is positive
 
 `BigNumber("-3").isPositive() => false`
-
-### `isEven()`
-Determines whether a BigNumber is even
-
-`BigNumber("28472310").isEven() => true`
-
-### `isOdd()`
-Determines whether a BigNumber is odd
-
-`BigNumber("283427").isOdd() => true`
-
-### `abs()`
-Gets the absolute value of the BigNumber
-
-`BigNumber("-26").abs() => BigNumber("26")`
 
 
 ## Operator overloads
@@ -215,9 +191,3 @@ Indexing operator
 
 `BigNumber d("26")[1] => 6`
 
-## License
-This project is under the [Apache License](https://github.com/Limeoats/BigNumber/blob/master/LICENSE.md).
-
-## Credit
-The BigNumber class was created by [Mark Guerra](http://www.twitter.com/Limeoats). Visit
-[Limeoats.com](http://www.limeoats.com) for more information.
